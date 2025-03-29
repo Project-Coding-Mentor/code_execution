@@ -118,7 +118,7 @@ export default function CodeExecutor() {
               setTestCases((prev) =>
                 prev.map((t) =>
                   t.input === test.input
-                    ? { ...t, result: resultData.stdout.trim(), passed: isCorrect }
+                    ? { ...t, result: resultData.stdout.trim(), passed: isCorrect, status: "completed" }
                     : t
                 )
               );
@@ -129,7 +129,7 @@ export default function CodeExecutor() {
               setTestCases((prev) =>
                 prev.map((t) =>
                   t.input === test.input
-                    ? { ...t, result: "Runtime Error", passed: false }
+                    ? { ...t, result: "Runtime Error", passed: false, status: "completed" }
                     : t
                 )
               );
@@ -256,7 +256,9 @@ export default function CodeExecutor() {
           <div
             key={index}
             className={`p-2 mb-2 text-white ${
-              test.passed
+              test.status === "pending"
+                ? "bg-gray-700" // Gray for pending test cases
+                : test.passed
                 ? "bg-green-700" // Green for passed test cases
                 : test.result === "Runtime Error"
                 ? "bg-red-700" // Red for runtime errors
@@ -265,7 +267,9 @@ export default function CodeExecutor() {
           >
             <p>Input: {test.input}</p>
             <p>Expected Output: {test.expected}</p>
-            {test.result === "Runtime Error" ? (
+            {test.status === "pending" ? (
+              <p className="text-yellow-400">Status: Pending</p>
+            ) : test.result === "Runtime Error" ? (
               <p className="text-red-400">Error: {test.result}</p>
             ) : (
               <p>Actual Output: {test.result || "Pending"}</p>
