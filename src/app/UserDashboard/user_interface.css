@@ -1,0 +1,107 @@
+/* General Styling */
+body {
+    background-color: black;
+    color: white;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Main container */
+  .dashboard-container {
+    padding: 24px;
+    min-height: 100vh;
+  }
+  
+  /* Header */
+  .dashboard-container h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .header2{
+    padding: 30px;
+  }
+  
+  .dashboard-container p {
+    text-align: center;
+    color: gray;
+  }
+  
+  /* Progress Graph */
+  .progress-container {
+    margin-top: 24px;
+    padding: 16px;
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    width: 900px;
+  }
+  
+  .progress-title {
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  
+  /* Topics Covered */
+  .topics-container {
+    margin-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .topic-box {
+    background-color: #1a1a1a;
+    padding: 16px;
+    border-radius: 12px;
+    width: 25%;
+    min-width: 250px;
+  }
+  
+  .topic-box h3 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .topic-box p {
+    font-size: 0.9rem;
+    color: #ccc;
+  }
+  
+  /* Topic Colors */
+  .advanced h3 {
+    color: #ff4d4d;
+  }
+  
+  .intermediate h3 {
+    color: #ffcc00;
+  }
+  
+  .fundamental h3 {
+    color: #66ff66;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .topics-container {
+        flex-direction: column;
+        align-items: center;
+    }
+  
+    .topic-box {
+        width: 80%;
+    }
+  }
+  
+  .Start_progress{
+    background-color: #373837;
+    padding: 16px;
+    border-radius: 12px;
+    width: 900px;
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
