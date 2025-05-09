@@ -10,7 +10,8 @@ function Question({ title, description }: QuestionProps) {
     <Card className="bg-black flex-1 relative left-0 border-none rounded-none">
       <CardContent>
         <h2 className="text-lg font-bold text-white mb-2">{title}</h2>
-        <p className="text-gray-300">{description}</p>
+        <p className="text-white">{description.split("\n").map((line, index) => <span key={index}>{line}<br /></span>)}</p>
+
       </CardContent>
     </Card>
   );

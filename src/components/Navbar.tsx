@@ -8,7 +8,7 @@ function Navbar() {
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <div className="text-2xl font-bold">
-          <Link href="/">MyApp</Link>
+          <Link href="/">CodeMeter</Link>
         </div>
 
         {/* Navigation Links */}

@@ -101,42 +101,47 @@ export default function CodeExecutor() {
           body: JSON.stringify({
             source_code: code,
             language_id: language.id,
-            stdin: test.input, // Pass the test case input here
+            stdin: test.input + "\n", // Ensure newline at the end
           }),
         });
-
+  
         const data = await response.json();
+  
         if (data.token) {
-          setTimeout(async () => {
+          let resultData;
+          while (true) {
+            await new Promise((res) => setTimeout(res, 1000)); // Poll every second
+  
             const resultResponse = await fetch(`http://localhost:2358/submissions/${data.token}`);
-            const resultData = await resultResponse.json();
+            resultData = await resultResponse.json();
+  
+            if (resultData.status && resultData.status.id >= 3) break; // Status 3+ means finished
+          }
+  
+          if (resultData.stdout) {
+            const isCorrect = resultData.stdout.trim() === test.expected;
+  
+            setTestCases((prev) =>
+              prev.map((t) =>
+                t.input === test.input
+                  ? { ...t, result: resultData.stdout.trim(), passed: isCorrect, status: "completed" }
+                  : t
+              )
+            );
+  
+            setOutput(resultData.stdout.trim());
+          } else {
+            setTestCases((prev) =>
+              prev.map((t) =>
+                t.input === test.input
+                  ? { ...t, result: "Runtime Error", passed: false, status: "completed" }
+                  : t
+              )
+            );
+            console.log("Execution Result:", resultData);
 
-            // Check if resultData.stdout exists
-            if (resultData.stdout) {
-              const isCorrect = resultData.stdout.trim() === test.expected;
-
-              setTestCases((prev) =>
-                prev.map((t) =>
-                  t.input === test.input
-                    ? { ...t, result: resultData.stdout.trim(), passed: isCorrect, status: "completed" }
-                    : t
-                )
-              );
-
-              setOutput(resultData.stdout.trim());
-            } else {
-              // Handle runtime error
-              setTestCases((prev) =>
-                prev.map((t) =>
-                  t.input === test.input
-                    ? { ...t, result: "Runtime Error", passed: false, status: "completed" }
-                    : t
-                )
-              );
-
-              setOutput(resultData.stderr || "Runtime Error");
-            }
-          }, 2000);
+            setOutput(resultData.stderr || "Runtime Error");
+          }
         }
       }
     } catch (error) {
@@ -144,7 +149,7 @@ export default function CodeExecutor() {
       console.error("Error executing code:", error);
     }
   };
-
+  
   const submitCode = () => {
     setSubmissions((prevSubmissions) => [...prevSubmissions, code]); // Add the current code to the submissions list
   };
@@ -265,8 +270,13 @@ export default function CodeExecutor() {
                 : "bg-red-700" // Red for failed test cases
             }`}
           >
-            <p>Input: {test.input}</p>
-            <p>Expected Output: {test.expected}</p>
+            <div>
+  <p><strong>Input:</strong></p>
+  {test.input.split("\n").map((line, i) => (
+    <div key={i}>{line}</div>
+  ))}
+</div>
+            <p><strong>Expected Output:</strong> {test.expected}</p>
             {test.status === "pending" ? (
               <p className="text-yellow-400">Status: Pending</p>
             ) : test.result === "Runtime Error" ? (
